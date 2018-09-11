@@ -29,7 +29,7 @@ class BurgerBuilder extends Component {
     //         });
     // }
 
-    updatePurchaseState (ingredients) {
+    isPurchasable (ingredients) {
         const sum = Object.keys(ingredients)
             .map(igKey => {
                 return ingredients[igKey];
@@ -49,20 +49,7 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        this.setState({ loading: true });
-
-        const queryParams = [];
-        for (let i in this.props.ingredients) {
-            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.props.ingredients[i]));
-        }
-
-        queryParams.push('price=' + this.props.totalPrice);
-
-        const queryString = queryParams.join('&');
-        this.props.history.push({
-            pathname: '/checkout',
-            search: '?' + queryString
-        });
+        this.props.history.push('/checkout');
     }
 
     render() {
@@ -84,7 +71,7 @@ class BurgerBuilder extends Component {
                         ingredientAdded={this.props.onAddIngredient}
                         ingredientRemoved={this.props.onRemoveIngredient} 
                         disabled={disabledInfo} 
-                        purchasable={() => this.updatePurchaseState(this.props.ingredients)}
+                        purchasable={this.isPurchasable(this.props.ingredients)}
                         ordered={this.purchaseHandler}
                         price={this.props.totalPrice} />
                 </Aux>
