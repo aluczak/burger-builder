@@ -22,7 +22,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                order: state.orders.concat(newOrder)
+                orders: state.orders.concat(newOrder)
             }
         case actionTypes.FETCH_INGREDIENTS_FAILED:
             return {
@@ -33,3 +33,5 @@ const reducer = (state = initialState, action) => {
             return state;
     }
 }
+
+export default reducer;
