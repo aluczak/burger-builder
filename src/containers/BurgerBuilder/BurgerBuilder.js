@@ -13,21 +13,12 @@ import * as burgerBuilderActions from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
     state = {
-        totalPrice: 4,
-        purchasable: false,
-        purchasing: false,
-        loading: false,
-        error: false
+        purchasing: false
     }
 
-    // componentDidMount() {
-    //     axios.get('https://react-my-burger-21600.firebaseio.com/ingredients.json')
-    //         .then(response => {
-    //             this.setState({ ingredients: response.data});
-    //         }).catch(err => {
-    //             this.setState({ error: true });
-    //         });
-    // }
+    componentDidMount() {
+        this.props.initIngredients();
+    }
 
     isPurchasable (ingredients) {
         const sum = Object.keys(ingredients)
@@ -62,7 +53,7 @@ class BurgerBuilder extends Component {
         }
 
         let orderSummary = null;
-        let burger = this.state.error ? 'Ingredients cannott be loaded' : <Spinner />;
+        let burger = this.props.error ? 'Ingredients cannot be loaded' : <Spinner />;
         if(this.props.ingredients) {
             burger = (
                 <Aux>
@@ -84,10 +75,6 @@ class BurgerBuilder extends Component {
                 price={this.props.totalPrice} />;
         }
 
-        if(this.state.loading) {
-            orderSummary = <Spinner />;
-        }
-
         return (
             <Aux>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
@@ -102,7 +89,8 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
     return {
         ingredients: state.ingredients,
-        totalPrice: state.totalPrice
+        totalPrice: state.totalPrice,
+        error: state.error
     }
 }
 
@@ -110,6 +98,8 @@ const mapDispatchToProps = dispatch => {
     return {
         onAddIngredient: (ingredientName) => dispatch(burgerBuilderActions.addIngredient(ingredientName)),
         onRemoveIngredient: (ingredientName) => dispatch(burgerBuilderActions.removeIngredient(ingredientName)),
+        initIngredients: () => dispatch(burgerBuilderActions.initIngredients()),
+        fetchIngredientsFailed: () => dispatch(burgerBuilderActions.fetchIngredientsFailed())
     }
 }
 
