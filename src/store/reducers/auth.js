@@ -10,7 +10,7 @@ const initialState = {
 
 const authStart = (state, action) => {
     return updateObject(state, { error: null, loading: true });
-}
+};
 
 const authSucces = (state, action) => {
     return updateObject(state, { 
@@ -18,27 +18,29 @@ const authSucces = (state, action) => {
         userId: action.userId,
         error: null,
         loading: false
-    })
-}
+    });
+};
 
 const authFailure = (state, action) => {
     return updateObject(state, {
         error: action.error,
         loading: false
-    })
-}
+    });
+};
+
+const authLogout = (state, action) => {
+    return updateObject(state, { token: null, userId: null });
+};
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
-        case actionTypes.AUTH_START:
-            return authStart(state, action);
-        case actionTypes.AUTH_SUCCESS:
-            return authSucces(state, action);
-        case actionTypes.AUTH_FAILURE:
-            return authFailure(state, action);
+        case actionTypes.AUTH_START: return authStart(state, action);
+        case actionTypes.AUTH_SUCCESS: return authSucces(state, action);
+        case actionTypes.AUTH_FAILURE: return authFailure(state, action);
+        case actionTypes.AUTH_LOGOUT: return authLogout(state, action);
         default: 
             return state;
     }
-}
+};
 
 export default reducer;
