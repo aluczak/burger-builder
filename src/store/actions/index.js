@@ -10,3 +10,10 @@ export {
     purchaseInit,
     loadOrders
 } from './order';
+
+export {
+    auth,
+    logout,
+    setAuthRedirectPath,
+    authCheckState
+} from './auth';
