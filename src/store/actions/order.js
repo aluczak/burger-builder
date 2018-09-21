@@ -1,5 +1,4 @@
 import * as actionTypes from './actionsTypes';
-import axios from '../../axios-orders';
 
 export const purchaseBurgerSuccess = (id, orderData) => {
     return {
@@ -23,14 +22,10 @@ export const purchaseBurgerStart = () => {
 }
 
 export const purchaseBurger = (orderData, token) => {
-    return dispatch => {
-        dispatch(purchaseBurgerStart());
-        axios.post('/orders.json?auth=' + token, orderData)
-            .then(response => {
-                dispatch(purchaseBurgerSuccess(response.data.name, orderData));
-            }).catch(error => {
-                dispatch(purchaseBurgerFailure(error));
-            });
+    return {
+        type: actionTypes.PURCHASE_BURGER,
+        token: token,
+        orderData: orderData
     }
 }
 
@@ -40,43 +35,30 @@ export const purchaseInit = () => {
     }
 }
 
-const loadOrdersSuccess = (orders) => {
+export const loadOrdersSuccess = (orders) => {
     return {
         type: actionTypes.LOAD_ORDERS_SUCCESS,
         orders: orders
     }
 }
 
-const loadOrdersFailure = (error) => {
+export const loadOrdersFailure = (error) => {
     return {
         type: actionTypes.LOAD_ORDERS_FAILURE,
         error: error
     }
 }
 
-const loadOrdersStart = () => {
+export const loadOrdersStart = () => {
     return {
         type: actionTypes.LOAD_ORDERS_START
     }
 }
 
 export const loadOrders = (token, userId) => {
-    return dispatch => {
-        dispatch(loadOrdersStart());
-        const queryParams = `?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
-        axios.get('/orders.json' + queryParams)
-            .then(res => {
-                const fetchedOrders = [];
-                for (let key in res.data) {
-                    fetchedOrders.push({
-                        ...res.data[key],
-                        id: key
-                    });
-                }
-
-                dispatch(loadOrdersSuccess(fetchedOrders));
-            }).catch(err => {
-                dispatch(loadOrdersFailure(err));
-            });
+    return {
+        type: actionTypes.LOAD_ORDERS,
+        token: token,
+        userId: userId
     }
 }
